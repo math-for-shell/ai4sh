@@ -1,0 +1,60 @@
+
+        Can one really create a neural network in the shell language?
+        Yes, justinstaines/neuralnetwork did. 
+        https://github.com/justinstaines/neuralnetwork
+        But it uses both 'bc' and 'awk'
+        for the math, plus 'cut' and 'tr' for text handling.
+        
+        Can one really create a neural network written in ~only~ the shell language?
+        Well, it means we need a pretty powerful calculator, written in the shell language.
+        Can one really create even a usable, much less a powerful calculator, written in shell?
+        Yes, https://github.com/math_for_shell/iq4sh has done that.
+        
+        Yeah, okay. Such a shell-only calculator could never compete against 'real' programs,
+        written in 'real' programming languages -even I didn't think that could happen.
+        
+    Comparison of original predict.sh by Justin Staines -written for bash/zsh
+                            vs.
+    predict-able.sh by Gilbert Ashley - a line-by line translation for any posix shell
+    
+    predict-able.sh replaces the calls to the external programs cut, bc, awk and tr with
+    functions from the iq4sh calculator and a pair of AI functions from iq+.
+    
+    Each script was tested using 10 iterations and the same set of beginning data for all tests.
+    Tests were repeated or attempted under these shells: bash first because it's everywhere, 
+    then zsh, posh, dash and ksh. I say attempted because the original predict.sh would
+    only run under bash, zsh and ksh.
+    
+    Comparing the number of code lines, external dependencies and calls, predict.sh has only 69
+    lines of code and depends on cut, bc and awk. It calls cut 9 times, bc 42 times and awk 4 times.
+    That makes a total of 55 external calls to 3 programs.
+    
+    The translated precict-able.sh has 91 lines of code, 23 of which are the sigmoid and tanh 
+    functions from iq4sh-ext. They are responsible replacing awk, but they depend completely 
+    on iq4sh, which has 725 lines of code -responsible for replacing bc. The 9 calls to cut from
+    the original script were needless and are not repeated here. So, predict-able.sh depends on
+    iq4sh -which it 'sources' to include the functionality in predict-able.sh. The file is only
+    sourced once, so predict-able.sh makes 1 external call (actually ~sources~) to 1 program.
+    
+    Each script was then time-tested as noted above
+         Script->   predict.sh      predict-able.sh
+    Shell|________________________________________
+    bash |          1,390ms         7,584ms   (Ouch, this is why iq4sh had to work for other shells)      
+    zsh  |          1,352ms         6,189ms
+    posh |          did not run     5,867ms   (3 ouches)
+    dash |          did not run     2.665ms   (now iq4sh begins to compete with original bash time)
+    At first I didn't have ksh, but then installed it -and was surprised.
+    ksh  |          1,195ms         1.063ms   {:-o) we've actually beaten bc and awk
+    
+    Another look at the external calls makes it more plausible. We replace the 9 calls to 'cut' in 
+    the original script with 1 use of the 'read' builtin. But these commands only run once, at the
+    top of the script. All the other calls to 'bc' and 'awk' occur in each iteration of the loop.
+    So, actually there are 420 calls to 'bc' and 40 calls to awk, for a total of 469 external calls,
+    against the single external call made by predict-able.sh to iq4sh. I was not really surprised
+    to see that the original script ran faster under 'ksh', but I didn't expect to see iq4sh beat 
+    'bc' and 'awk' -ever.
+    
+    So, lastly, I changed both scripts to perform 100 iterations under 'ksh', and ran the timings
+    again. The result:
+    predict.sh: 10,827ms     predict-able.sh: 8,831ms
+    It appears that iq4sh scales well, as the ~10% time improvement remains, even with more loops.

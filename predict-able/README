@@ -1,0 +1,27 @@
+
+#1 In order to run the 'predict-able' demonstration, place a copy of iq in the same folder with the other files.
+
+#2 If your system shell at /bin/sh is bash, zsh or ksh, then skip this next step.
+    Otherwise, you'll need to edit the first line (shebang) of predict.sh and predict-able.sh to have
+    them be executed. The original script, predict.sh will only run under bash, zsh or ksh.
+    predict-able.sh will run under all those, plus posh and dash.
+    See the header of each script and change shebang as needed.
+    
+#3 Make the scripts executable with the command:
+chmod +x *.sh
+Use a wide terminal window for best viewing of output.
+Execute the original script from this directory like this:
+./predict.sh
+You should see first, this output line followed by similar lines:
+1.29044000,.69426400,.46348000,.69044000,1.19426400,.66348000,.44713200,.64713200,1.04713200            0.668188
+< ----------------------- these are the values of the weights for each iteration ----------->   and this^^^^^^^^ is the probability.
+The probability is highlighted and illustrates how the best guess of the algorithm gets better each time.
+
+#4 Then execute the script using 'iq' like this:
+./predict-able.sh
+
+#5 To compare execution times, preceed the commands with 'time':
+time ./predict.sh
+time ./predict-able.sh
+
+See the file Comparison.txt for more
