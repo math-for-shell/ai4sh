@@ -24,4 +24,6 @@ The probability is highlighted and illustrates how the best guess of the algorit
 time ./predict.sh
 time ./predict-able.sh
 
+You may notice that we don't get the same results. This is because we use a different activation-function -tanh instead of logistic- which is faster because it avoids the use of pow. It doesn't converge as fast, but the learning can definitely be observed.
+
 See the file Comparison.txt for more
