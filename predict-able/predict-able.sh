@@ -10,11 +10,12 @@
 input1=0.1
 input2=0.1
 target=1
-e=2.718281828459045235360287471352
+#e=2.718281828459045235360287471352
+# instead we use 'ee' declared on iq
 
-source=1 . ./iq
-# be sure to source the correct iq version, if named like below
-#source=1 . ./iq_1.618033988.sh
+# include the iq math functions by souricng iq
+src=1 . ./iq # if 'iq' is in the same directory as this script, leave this line commented
+# src=1 . iq # if iq is in your PATH, uncomment this line and comment the above line
 
 # we use these three functions copied from iq4sh-ext_1.618.sh
 sigmoid_tanh() { case $1 in -s*) scale=${1#-s*} ; shift ;; *) scale=$defprec ;; esac
@@ -41,7 +42,7 @@ tanh_pade() { case $1 in -s*) thpscale=${1#-s*} ; shift ;; *) thpscale=$defprec 
     g=$( mul -s$thpscale 210 $x4 )
     j=$( add -s$thpscale  10395 + $f + $g + $x6 )
     
-    r_tanh=$( div -s$thpscale $e / $j )
+    r_tanh=$( div -s$thpscale $ee / $j )
     echo $tanh_neg$r_tanh
 } ## tanh_pade
 
